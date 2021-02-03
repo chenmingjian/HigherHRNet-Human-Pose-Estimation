@@ -37,7 +37,7 @@ def do_train(cfg, model, data_loader, loss_factory, optimizer, epoch,
         data_time.update(time.time() - end)
 
         # compute output
-        outputs = model(images)
+        outputs = model(images.cuda(non_blocking=True))
 
         heatmaps = list(map(lambda x: x.cuda(non_blocking=True), heatmaps))
         masks = list(map(lambda x: x.cuda(non_blocking=True), masks))

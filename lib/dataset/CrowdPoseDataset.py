@@ -68,7 +68,7 @@ class CrowdPoseDataset(Dataset):
         # example: root/json/crowdpose_{train,val,test}.json
         return os.path.join(
             self.root,
-            'json',
+            'annotations',
             'crowdpose_{}.json'.format(
                 self.dataset
             )
