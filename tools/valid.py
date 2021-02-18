@@ -149,10 +149,11 @@ def main():
     all_preds = []
     all_scores = []
 
-    pbar = tqdm(total=len(test_dataset)) if cfg.TEST.LOG_PROGRESS else None
+    # pbar = tqdm(total=len(test_dataset)) if cfg.TEST.LOG_PROGRESS else None
+    pbar = tqdm(total=len(test_dataset))
     for i, (images, annos) in enumerate(data_loader):
         assert 1 == images.size(0), 'Test batch size should be 1'
-
+        
         image = images[0].cpu().numpy()
         # size at scale 1.0
         base_size, center, scale = get_multi_scale_size(
@@ -190,8 +191,9 @@ def main():
                 [final_heatmaps.size(3), final_heatmaps.size(2)]
             )
 
-        if cfg.TEST.LOG_PROGRESS:
-            pbar.update()
+        # if cfg.TEST.LOG_PROGRESS:
+        #     pbar.update()
+        pbar.update()
 
         if i % cfg.PRINT_FREQ == 0:
             prefix = '{}_{}'.format(os.path.join(final_output_dir, 'result_valid'), i)

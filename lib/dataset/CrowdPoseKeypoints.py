@@ -38,7 +38,7 @@ class CrowdPoseKeypoints(CrowdPoseDataset):
             assert cfg.DATASET.NUM_JOINTS == 14, 'Number of joint for CrowdPose is 14'
 
         self.num_scales = self._init_check(heatmap_generator, joints_generator)
-
+        self.num_scales = 2
         self.num_joints = cfg.DATASET.NUM_JOINTS
         self.with_center = cfg.DATASET.WITH_CENTER
         self.num_joints_without_center = self.num_joints - 1 \
@@ -47,6 +47,7 @@ class CrowdPoseKeypoints(CrowdPoseDataset):
         self.base_sigma = cfg.DATASET.BASE_SIGMA
         self.base_size = cfg.DATASET.BASE_SIZE
         self.int_sigma = cfg.DATASET.INT_SIGMA
+        self.cfg = cfg
 
         if remove_images_without_annotations:
             self.ids = [
@@ -72,8 +73,8 @@ class CrowdPoseKeypoints(CrowdPoseDataset):
         # TODO(bowen): to generate scale-aware sigma, modify `get_joints` to associate a sigma to each joint
         joints = self.get_joints(anno)
 
-        mask_list = [mask.copy() for _ in range(self.num_scales)]
-        joints_list = [joints.copy() for _ in range(self.num_scales)]
+        mask_list = [mask.copy() for _ in range(self.num_scales+ (1 if self.cfg.MODEL.VIS_AND_ALL else 0))]
+        joints_list = [joints.copy() for _ in range(self.num_scales+(1 if self.cfg.MODEL.VIS_AND_ALL else 0))]
         target_list = list()
 
         if self.transforms:
@@ -82,13 +83,18 @@ class CrowdPoseKeypoints(CrowdPoseDataset):
             )
 
         for scale_id in range(self.num_scales):
-            target_t = self.heatmap_generator[scale_id](joints_list[scale_id])
+            target_t = self.heatmap_generator[scale_id](joints_list[scale_id], sampleInvert=self.cfg.MODEL.SAMPLE_INVERT)
             joints_t = self.joints_generator[scale_id](joints_list[scale_id])
 
             target_list.append(target_t.astype(np.float32))
             mask_list[scale_id] = mask_list[scale_id].astype(np.float32)
             joints_list[scale_id] = joints_t.astype(np.int32)
-
+        if self.cfg.MODEL.VIS_AND_ALL:
+            target_t = self.heatmap_generator[-1](joints_list[-1], vis=True)
+            joints_t = self.joints_generator[-1](joints_list[-1])
+            target_list.append(target_t.astype(np.float32))
+            mask_list[-1] = mask_list[scale_id].astype(np.float32)
+            joints_list[-1] = joints_t.astype(np.int32)
         return img, target_list, mask_list, joints_list
 
     def get_joints(self, anno):

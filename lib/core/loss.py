@@ -255,21 +255,21 @@ class MultiLossFactory(nn.Module):
             'LOSS.PUSH_LOSS_FACTOR should be a list or tuple'
         assert isinstance(cfg.LOSS.PUSH_LOSS_FACTOR, (list, tuple)), \
             'LOSS.PUSH_LOSS_FACTOR should be a list or tuple'
-        assert len(cfg.LOSS.WITH_HEATMAPS_LOSS) == cfg.LOSS.NUM_STAGES, \
-            'LOSS.WITH_HEATMAPS_LOSS and LOSS.NUM_STAGE should have same length, got {} vs {}.'.\
-                format(len(cfg.LOSS.WITH_HEATMAPS_LOSS), cfg.LOSS.NUM_STAGES)
-        assert len(cfg.LOSS.WITH_HEATMAPS_LOSS) == len(cfg.LOSS.HEATMAPS_LOSS_FACTOR), \
-            'LOSS.WITH_HEATMAPS_LOSS and LOSS.HEATMAPS_LOSS_FACTOR should have same length, got {} vs {}.'.\
-                format(len(cfg.LOSS.WITH_HEATMAPS_LOSS), len(cfg.LOSS.HEATMAPS_LOSS_FACTOR))
-        assert len(cfg.LOSS.WITH_AE_LOSS) == cfg.LOSS.NUM_STAGES, \
-            'LOSS.WITH_AE_LOSS and LOSS.NUM_STAGE should have same length, got {} vs {}.'.\
-                format(len(cfg.LOSS.WITH_AE_LOSS), cfg.LOSS.NUM_STAGES)
-        assert len(cfg.LOSS.WITH_AE_LOSS) == len(cfg.LOSS.PUSH_LOSS_FACTOR), \
-            'LOSS.WITH_AE_LOSS and LOSS.PUSH_LOSS_FACTOR should have same length, got {} vs {}.'. \
-                format(len(cfg.LOSS.WITH_AE_LOSS), len(cfg.LOSS.PUSH_LOSS_FACTOR))
-        assert len(cfg.LOSS.WITH_AE_LOSS) == len(cfg.LOSS.PULL_LOSS_FACTOR), \
-            'LOSS.WITH_AE_LOSS and LOSS.PULL_LOSS_FACTOR should have same length, got {} vs {}.'. \
-                format(len(cfg.LOSS.WITH_AE_LOSS), len(cfg.LOSS.PULL_LOSS_FACTOR))
+        # assert len(cfg.LOSS.WITH_HEATMAPS_LOSS) == cfg.LOSS.NUM_STAGES, \
+        #     'LOSS.WITH_HEATMAPS_LOSS and LOSS.NUM_STAGE should have same length, got {} vs {}.'.\
+                # format(len(cfg.LOSS.WITH_HEATMAPS_LOSS), cfg.LOSS.NUM_STAGES)
+        # assert len(cfg.LOSS.WITH_HEATMAPS_LOSS) == len(cfg.LOSS.HEATMAPS_LOSS_FACTOR), \
+        #     'LOSS.WITH_HEATMAPS_LOSS and LOSS.HEATMAPS_LOSS_FACTOR should have same length, got {} vs {}.'.\
+        #         format(len(cfg.LOSS.WITH_HEATMAPS_LOSS), len(cfg.LOSS.HEATMAPS_LOSS_FACTOR))
+        # assert len(cfg.LOSS.WITH_AE_LOSS) == cfg.LOSS.NUM_STAGES, \
+        #     'LOSS.WITH_AE_LOSS and LOSS.NUM_STAGE should have same length, got {} vs {}.'.\
+        #         format(len(cfg.LOSS.WITH_AE_LOSS), cfg.LOSS.NUM_STAGES)
+        # assert len(cfg.LOSS.WITH_AE_LOSS) == len(cfg.LOSS.PUSH_LOSS_FACTOR), \
+        #     'LOSS.WITH_AE_LOSS and LOSS.PUSH_LOSS_FACTOR should have same length, got {} vs {}.'. \
+        #         format(len(cfg.LOSS.WITH_AE_LOSS), len(cfg.LOSS.PUSH_LOSS_FACTOR))
+        # assert len(cfg.LOSS.WITH_AE_LOSS) == len(cfg.LOSS.PULL_LOSS_FACTOR), \
+        #     'LOSS.WITH_AE_LOSS and LOSS.PULL_LOSS_FACTOR should have same length, got {} vs {}.'. \
+        #         format(len(cfg.LOSS.WITH_AE_LOSS), len(cfg.LOSS.PULL_LOSS_FACTOR))
 
     def _forward_check(self, outputs, heatmaps, masks, joints):
         assert isinstance(outputs, list), \
@@ -280,20 +280,20 @@ class MultiLossFactory(nn.Module):
             'masks should be a list, got {} instead.'.format(type(masks))
         assert isinstance(joints, list), \
             'joints should be a list, got {} instead.'.format(type(joints))
-        assert len(outputs) == self.num_stages, \
-            'len(outputs) and num_stages should been same, got {} vs {}.'.format(len(outputs), self.num_stages)
-        assert len(outputs) == len(heatmaps), \
-            'outputs and heatmaps should have same length, got {} vs {}.'.format(len(outputs), len(heatmaps))
-        assert len(outputs) == len(masks), \
-            'outputs and masks should have same length, got {} vs {}.'.format(len(outputs), len(masks))
-        assert len(outputs) == len(joints), \
-            'outputs and joints should have same length, got {} vs {}.'.format(len(outputs), len(joints))
-        assert len(outputs) == len(self.heatmaps_loss), \
-            'outputs and heatmaps_loss should have same length, got {} vs {}.'. \
-                format(len(outputs), len(self.heatmaps_loss))
-        assert len(outputs) == len(self.ae_loss), \
-            'outputs and ae_loss should have same length, got {} vs {}.'. \
-                format(len(outputs), len(self.ae_loss))
+        # assert len(outputs) == self.num_stages, \
+            # 'len(outputs) and num_stages should been same, got {} vs {}.'.format(len(outputs), self.num_stages)
+        # assert len(outputs) == len(heatmaps), \
+        #     'outputs and heatmaps should have same length, got {} vs {}.'.format(len(outputs), len(heatmaps))
+        # assert len(outputs) == len(masks), \
+        #     'outputs and masks should have same length, got {} vs {}.'.format(len(outputs), len(masks))
+        # assert len(outputs) == len(joints), \
+        #     'outputs and joints should have same length, got {} vs {}.'.format(len(outputs), len(joints))
+        # assert len(outputs) == len(self.heatmaps_loss), \
+        #     'outputs and heatmaps_loss should have same length, got {} vs {}.'. \
+        #         format(len(outputs), len(self.heatmaps_loss))
+        # assert len(outputs) == len(self.ae_loss), \
+        #     'outputs and ae_loss should have same length, got {} vs {}.'. \
+        #         format(len(outputs), len(self.ae_loss))
 
 
 def test_ae_loss():

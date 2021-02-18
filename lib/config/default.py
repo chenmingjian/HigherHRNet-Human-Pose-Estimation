@@ -63,6 +63,13 @@ _C.LOSS.AE_LOSS_TYPE = 'max'
 _C.LOSS.PUSH_LOSS_FACTOR = (0.001,)
 _C.LOSS.PULL_LOSS_FACTOR = (0.001,)
 
+# chen
+_C.MODEL.VIS_AND_ALL = False
+_C.MODEL.USE_BRANCH = False
+_C.MODEL.BRANCH_MERGE_STRATEGY = "all"
+_C.MODEL.USE_HALF_HEATMAP = False
+_C.MODEL.TWO_BRANCH_WEIGHT = 1
+_C.MODEL.SAMPLE_INVERT = False
 # DATASET related params
 _C.DATASET = CN()
 _C.DATASET.ROOT = ''
@@ -197,20 +204,21 @@ def update_config(cfg, args):
 
 
 def check_config(cfg):
-    assert cfg.LOSS.NUM_STAGES == len(cfg.LOSS.WITH_HEATMAPS_LOSS), \
-        'LOSS.NUM_SCALE should be the same as the length of LOSS.WITH_HEATMAPS_LOSS'
-    assert cfg.LOSS.NUM_STAGES == len(cfg.LOSS.HEATMAPS_LOSS_FACTOR), \
-        'LOSS.NUM_SCALE should be the same as the length of LOSS.HEATMAPS_LOSS_FACTOR'
-    assert cfg.LOSS.NUM_STAGES == len(cfg.LOSS.WITH_AE_LOSS), \
-        'LOSS.NUM_SCALE should be the same as the length of LOSS.WITH_AE_LOSS'
-    assert cfg.LOSS.NUM_STAGES == len(cfg.LOSS.PUSH_LOSS_FACTOR), \
-        'LOSS.NUM_SCALE should be the same as the length of LOSS.PUSH_LOSS_FACTOR'
-    assert cfg.LOSS.NUM_STAGES == len(cfg.LOSS.PULL_LOSS_FACTOR), \
-        'LOSS.NUM_SCALE should be the same as the length of LOSS.PULL_LOSS_FACTOR'
-    assert cfg.LOSS.NUM_STAGES == len(cfg.TEST.WITH_HEATMAPS), \
-        'LOSS.NUM_SCALE should be the same as the length of TEST.WITH_HEATMAPS'
-    assert cfg.LOSS.NUM_STAGES == len(cfg.TEST.WITH_AE), \
-        'LOSS.NUM_SCALE should be the same as the length of TEST.WITH_AE'
+    pass
+    # assert cfg.LOSS.NUM_STAGES == len(cfg.LOSS.WITH_HEATMAPS_LOSS), \
+    #     'LOSS.NUM_SCALE should be the same as the length of LOSS.WITH_HEATMAPS_LOSS'
+    # assert cfg.LOSS.NUM_STAGES == len(cfg.LOSS.HEATMAPS_LOSS_FACTOR), \
+    #     'LOSS.NUM_SCALE should be the same as the length of LOSS.HEATMAPS_LOSS_FACTOR'
+    # assert cfg.LOSS.NUM_STAGES == len(cfg.LOSS.WITH_AE_LOSS), \
+    #     'LOSS.NUM_SCALE should be the same as the length of LOSS.WITH_AE_LOSS'
+    # assert cfg.LOSS.NUM_STAGES == len(cfg.LOSS.PUSH_LOSS_FACTOR), \
+    #     'LOSS.NUM_SCALE should be the same as the length of LOSS.PUSH_LOSS_FACTOR'
+    # assert cfg.LOSS.NUM_STAGES == len(cfg.LOSS.PULL_LOSS_FACTOR), \
+    #     'LOSS.NUM_SCALE should be the same as the length of LOSS.PULL_LOSS_FACTOR'
+    # assert cfg.LOSS.NUM_STAGES == len(cfg.TEST.WITH_HEATMAPS), \
+    #     'LOSS.NUM_SCALE should be the same as the length of TEST.WITH_HEATMAPS'
+    # assert cfg.LOSS.NUM_STAGES == len(cfg.TEST.WITH_AE), \
+    #     'LOSS.NUM_SCALE should be the same as the length of TEST.WITH_AE'
 
 
 if __name__ == '__main__':

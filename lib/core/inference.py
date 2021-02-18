@@ -83,6 +83,7 @@ def get_multi_stage_outputs(
     tags = []
 
     outputs = model(image)
+    outputs = outputs[:2]
     for i, output in enumerate(outputs):
         if len(outputs) > 1 and i != len(outputs) - 1:
             output = torch.nn.functional.interpolate(
@@ -118,6 +119,7 @@ def get_multi_stage_outputs(
         heatmaps_avg = 0
         num_heatmaps = 0
         outputs_flip = model(torch.flip(image, [3]))
+        outputs_flip = outputs_flip[:2]
         for i in range(len(outputs_flip)):
             output = outputs_flip[i]
             if len(outputs_flip) > 1 and i != len(outputs_flip) - 1:

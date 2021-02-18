@@ -25,13 +25,16 @@ class HeatmapGenerator():
         x0, y0 = 3*sigma + 1, 3*sigma + 1
         self.g = np.exp(- ((x - x0) ** 2 + (y - y0) ** 2) / (2 * sigma ** 2))
 
-    def __call__(self, joints):
+    def __call__(self, joints, vis=False, sampleInvert=False):
+        t = 0 
+        if vis:
+            t = 1
         hms = np.zeros((self.num_joints, self.output_res, self.output_res),
                        dtype=np.float32)
         sigma = self.sigma
         for p in joints:
             for idx, pt in enumerate(p):
-                if pt[2] > 0:
+                if pt[2] > t:
                     x, y = int(pt[0]), int(pt[1])
                     if x < 0 or y < 0 or \
                        x >= self.output_res or y >= self.output_res:
@@ -46,7 +49,7 @@ class HeatmapGenerator():
                     cc, dd = max(0, ul[0]), min(br[0], self.output_res)
                     aa, bb = max(0, ul[1]), min(br[1], self.output_res)
                     hms[idx, aa:bb, cc:dd] = np.maximum(
-                        hms[idx, aa:bb, cc:dd], self.g[a:b, c:d])
+                        hms[idx, aa:bb, cc:dd], self.g[a:b, c:d]) * (1 if pt[2] == 2 or not sampleInvert else -1)
         return hms
 
 
