@@ -242,7 +242,7 @@ class MultiLossFactory(nn.Module):
                 push_losses.append(None)
                 pull_losses.append(None)
 
-        return heatmaps_losses, push_losses, pull_losses
+        return heatmaps_losses, push_losses, push_losses
 
     def _init_check(self, cfg):
         assert isinstance(cfg.LOSS.WITH_HEATMAPS_LOSS, (list, tuple)), \

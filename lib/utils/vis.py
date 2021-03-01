@@ -160,10 +160,11 @@ def save_batch_maps(
         batch_mask,
         file_name,
         map_type='heatmap',
-        normalize=True
+        normalize=True,
+        train=True
 ):
     if normalize:
-        batch_image = batch_image.clone()
+        batch_image = batch_image.clone().float()
         min = float(batch_image.min())
         max = float(batch_image.max())
 
@@ -180,11 +181,18 @@ def save_batch_maps(
     )
 
     for i in range(batch_size):
-        image = batch_image[i].mul(255)\
-                              .clamp(0, 255)\
-                              .byte()\
-                              .permute(1, 2, 0)\
-                              .cpu().numpy()
+        if train:
+            image = batch_image[i].mul(255)\
+                                .clamp(0, 255)\
+                                .byte()\
+                                .permute(1, 2, 0)\
+                                .cpu().numpy()
+        else:
+            image = batch_image[i].mul(255)\
+                                .clamp(0, 255)\
+                                .byte()\
+                                .permute(0, 1, 2)\
+                                .cpu().numpy()
 
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
         maps = batch_maps[i]

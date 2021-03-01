@@ -15,7 +15,7 @@ DATASET:
   DATA_FORMAT: jpg
   FLIP: 0.5
   INPUT_SIZE: 512
-  OUTPUT_SIZE: [128, 256, 256]
+  OUTPUT_SIZE: [128, 256, 128]
   MAX_NUM_PEOPLE: 30
   MAX_ROTATION: 30
   MAX_SCALE: 1.5
@@ -95,7 +95,7 @@ MODEL:
       CAT_OUTPUT:
       - True
   INIT_WEIGHTS: True
-  NAME: pose_higher_hrnet_tmp
+  NAME: pose_higher_hrnet_catFeatureForVis
   VIS_AND_ALL: true
   NUM_JOINTS: 14
   PRETRAINED: 'models/pytorch/imagenet/hrnet_w32-36af842e.pth'
@@ -128,3 +128,8 @@ TRAIN:
   SHUFFLE: True
   WD: 0.0001
 WORKERS: 4
+RESCORE:
+  HIDDEN_LAYER: 256
+  USE: True
+  MODEL_FILE: 'models/pytorch/rescore/final_rescore_crowd_pose_kpt.pth'
+  DATA_FILE: 'data/rescore_data/rescore_dataset_train_crowd_pose_kpt'

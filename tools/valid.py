@@ -44,6 +44,10 @@ from utils.transforms import get_multi_scale_size
 
 torch.multiprocessing.set_sharing_strategy('file_system')
 
+import sys
+sys.path.append("/home/chen/workshop/thesis/HRNet-Bottom-Up-Pose-Estimation/lib/core")
+from rescore import rescore_valid
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Test keypoints network')
@@ -190,7 +194,11 @@ def main():
                 grouped, center, scale,
                 [final_heatmaps.size(3), final_heatmaps.size(2)]
             )
-
+            if cfg.RESCORE.USE:
+                try:
+                    scores = rescore_valid(cfg, final_results, scores)
+                except:
+                    print("got one.")
         # if cfg.TEST.LOG_PROGRESS:
         #     pbar.update()
         pbar.update()
@@ -199,8 +207,15 @@ def main():
             prefix = '{}_{}'.format(os.path.join(final_output_dir, 'result_valid'), i)
             # logger.info('=> write {}'.format(prefix))
             save_valid_image(image, final_results, '{}.jpg'.format(prefix), dataset=test_dataset.name)
-            # save_debug_images(cfg, image_resized, None, None, outputs, prefix)
-
+            # for scale_idx in range(len(outputs)):
+            #     prefix_scale = prefix + '_output_{}'.format(
+            #         # cfg.DATASET.OUTPUT_SIZE[scale_idx]
+            #         scale_idx
+            #     )
+            #     save_debug_images(
+            #         cfg, images, None, None,
+            #         outputs[scale_idx], prefix_scale
+            #     )
         all_preds.append(final_results)
         all_scores.append(scores)
 

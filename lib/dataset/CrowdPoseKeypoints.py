@@ -90,11 +90,11 @@ class CrowdPoseKeypoints(CrowdPoseDataset):
             mask_list[scale_id] = mask_list[scale_id].astype(np.float32)
             joints_list[scale_id] = joints_t.astype(np.int32)
         if self.cfg.MODEL.VIS_AND_ALL:
-            target_t = self.heatmap_generator[-1](joints_list[-1], vis=True)
-            joints_t = self.joints_generator[-1](joints_list[-1])
+            target_t = self.heatmap_generator[-1](joints_list[-1], vis=True, half_heatmap=self.cfg.MODEL.USE_HALF_HEATMAP)
             target_list.append(target_t.astype(np.float32))
-            mask_list[-1] = mask_list[scale_id].astype(np.float32)
+            joints_t = self.joints_generator[-1](joints_list[-1])
             joints_list[-1] = joints_t.astype(np.int32)
+            mask_list[-1] = mask_list[-1].astype(np.float32)
         return img, target_list, mask_list, joints_list
 
     def get_joints(self, anno):

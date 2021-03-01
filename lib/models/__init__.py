@@ -12,3 +12,8 @@ import models.pose_higher_hrnet
 
 import models.pose_higher_hrnet_tmp
 import models.pose_higher_hrnet_sampleInvert
+
+import models.pose_higher_hrnet_catFeatureForVis
+import models.pose_higher_hrnet_catFeatureForVis_fix
+import models.pose_higher_hrnet_catFeatureForVis_fix_again
+import models.predictOKS

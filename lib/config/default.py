@@ -159,6 +159,12 @@ _C.DEBUG.SAVE_HEATMAPS_GT = True
 _C.DEBUG.SAVE_HEATMAPS_PRED = True
 _C.DEBUG.SAVE_TAGMAPS_PRED = True
 
+# rescore
+_C.RESCORE=CN()
+_C.RESCORE.USE=True
+_C.RESCORE.HIDDEN_LAYER=256
+_C.RESCORE.MODEL_FILE= 'model/rescore/final_rescore_crowd_pose_kpt.pth'
+_C.RESCORE.DATA_FILE='data/rescore_data/rescore_dataset_train_crowd_pose_kpt'
 
 def update_config(cfg, args):
     cfg.defrost()

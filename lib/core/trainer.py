@@ -24,7 +24,7 @@ def do_train(cfg, model, data_loader, loss_factory, optimizer, epoch,
     batch_time = AverageMeter()
     data_time = AverageMeter()
 
-    heatmaps_loss_meter = [AverageMeter() for _ in range(cfg.LOSS.NUM_STAGES)]
+    heatmaps_loss_meter = [AverageMeter() for _ in range(cfg.LOSS.NUM_STAGES + 1)]
     push_loss_meter = [AverageMeter() for _ in range(cfg.LOSS.NUM_STAGES)]
     pull_loss_meter = [AverageMeter() for _ in range(cfg.LOSS.NUM_STAGES)]
 
@@ -48,7 +48,7 @@ def do_train(cfg, model, data_loader, loss_factory, optimizer, epoch,
             loss_factory(outputs, heatmaps, masks, joints)
 
         loss = 0
-        for idx in range(cfg.LOSS.NUM_STAGES):
+        for idx in range(len(heatmaps_losses)):
             if heatmaps_losses[idx] is not None:
                 heatmaps_loss = heatmaps_losses[idx].mean(dim=0)
                 heatmaps_loss_meter[idx].update(
@@ -81,18 +81,29 @@ def do_train(cfg, model, data_loader, loss_factory, optimizer, epoch,
         end = time.time()
 
         if i % cfg.PRINT_FREQ == 0 and cfg.RANK == 0:
+            # msg = 'Epoch: [{0}][{1}/{2}]\t' \
+            #       'Time: {batch_time.val:.3f}s ({batch_time.avg:.3f}s)\t' \
+            #       'Speed: {speed:.1f} samples/s\t' \
+            #       'Data: {data_time.val:.3f}s ({data_time.avg:.3f}s)\t' \
+            #       '{heatmaps_loss}{push_loss}{pull_loss}'.format(
+            #           epoch, i, len(data_loader),
+            #           batch_time=batch_time,
+            #           speed=images.size(0)/batch_time.val,
+            #           data_time=data_time,
+            #           heatmaps_loss=_get_loss_info(heatmaps_loss_meter, 'heatmaps'),
+            #           push_loss=_get_loss_info(push_loss_meter, 'push'),
+            #           pull_loss=_get_loss_info(pull_loss_meter, 'pull')
+            #       )
             msg = 'Epoch: [{0}][{1}/{2}]\t' \
                   'Time: {batch_time.val:.3f}s ({batch_time.avg:.3f}s)\t' \
                   'Speed: {speed:.1f} samples/s\t' \
                   'Data: {data_time.val:.3f}s ({data_time.avg:.3f}s)\t' \
-                  '{heatmaps_loss}{push_loss}{pull_loss}'.format(
+                  '{heatmaps_loss}'.format(
                       epoch, i, len(data_loader),
                       batch_time=batch_time,
                       speed=images.size(0)/batch_time.val,
                       data_time=data_time,
                       heatmaps_loss=_get_loss_info(heatmaps_loss_meter, 'heatmaps'),
-                      push_loss=_get_loss_info(push_loss_meter, 'push'),
-                      pull_loss=_get_loss_info(pull_loss_meter, 'pull')
                   )
             logger.info(msg)
 
@@ -119,7 +130,8 @@ def do_train(cfg, model, data_loader, loss_factory, optimizer, epoch,
             prefix = '{}_{}'.format(os.path.join(output_dir, 'train'), i)
             for scale_idx in range(len(outputs)):
                 prefix_scale = prefix + '_output_{}'.format(
-                    cfg.DATASET.OUTPUT_SIZE[scale_idx]
+                    # cfg.DATASET.OUTPUT_SIZE[scale_idx]
+                    scale_idx
                 )
                 save_debug_images(
                     cfg, images, heatmaps[scale_idx], masks[scale_idx],
